@@ -1,18 +1,34 @@
-package com.example.yaoguangyao.coolweather.db.entity;
+package com.example.yaoguangyao.coolweather.model;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import com.example.yaoguangyao.coolweather.db.entity.City;
 
 /**
- * Created by yaoguangyao on 2017/2/8.
+ * Created by yaoguangyao on 2017/2/9.
  */
 
-public class City extends RealmObject {
-    @PrimaryKey
+public class CityBo {
     private int id;
     private String cityName;
     private int cityCode;
     private int provinceId;
+
+    public CityBo() {
+    }
+
+    public CityBo(City city) {
+        setId(city.getId());
+        setCityName(city.getCityName());
+        setProvinceId(city.getProvinceId());
+        setCityCode(city.getCityCode());
+    }
+
+    public City getEntity() {
+        City city = new City();
+        city.setId(getId());
+        city.setCityCode(getCityCode());
+        city.setCityName(getCityName());
+        return city;
+    }
 
     public int getId() {
         return id;
@@ -45,5 +61,4 @@ public class City extends RealmObject {
     public void setProvinceId(int provinceId) {
         this.provinceId = provinceId;
     }
-
 }
