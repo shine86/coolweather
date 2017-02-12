@@ -1,5 +1,6 @@
 package com.example.yaoguangyao.coolweather.view;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -25,6 +26,7 @@ import com.example.yaoguangyao.coolweather.R;
 import com.example.yaoguangyao.coolweather.http.WeatherApi;
 import com.example.yaoguangyao.coolweather.http.dto.DailyForecast;
 import com.example.yaoguangyao.coolweather.http.dto.WeatherDto;
+import com.example.yaoguangyao.coolweather.service.AutoUpdateService;
 import com.google.gson.Gson;
 
 /**
@@ -102,7 +104,7 @@ public class WeatherActiivity extends AppCompatActivity{
         sportTxt = (TextView) findViewById(R.id.txt_sport);
         bingPicImg = (ImageView) findViewById(R.id.img_bing_pic);
 
-        queryWeather();      
+        queryWeather();
     }
 
     public void queryWeather() {
@@ -137,6 +139,9 @@ public class WeatherActiivity extends AppCompatActivity{
             }
         });
         loadBingPic();
+
+        Intent intent = new Intent(this, AutoUpdateService.class);
+//        startActivity(intent);
     }
 
     public void requestWeather(String weatherId) {
@@ -232,5 +237,7 @@ public class WeatherActiivity extends AppCompatActivity{
         carWashTxt.setText(carWash);
         sportTxt.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+
+//
     }
 }
