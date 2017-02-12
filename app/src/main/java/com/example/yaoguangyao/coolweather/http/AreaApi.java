@@ -3,7 +3,6 @@ package com.example.yaoguangyao.coolweather.http;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.example.yaoguangyao.coolweather.db.entity.Province;
 import com.example.yaoguangyao.coolweather.model.CityBo;
 import com.example.yaoguangyao.coolweather.model.CountyBo;
 import com.example.yaoguangyao.coolweather.model.ProvinceBo;
@@ -49,6 +48,7 @@ public class AreaApi {
                         for (int i = 0; i < allProvinces.length(); i ++) {
                             JSONObject provinceObject = allProvinces.getJSONObject(i);
                             ProvinceBo provinceBo = new ProvinceBo();
+                            provinceBo.setId(provinceObject.getInt("id"));
                             provinceBo.setProvinceName(provinceObject.getString("name"));
                             provinceBo.setProvinceCode(provinceObject.getInt("id"));
                             provinceBoList.add(provinceBo);
@@ -86,6 +86,8 @@ public class AreaApi {
                             CityBo cityBo = new CityBo();
                             cityBo.setId(cityObject.getInt("id"));
                             cityBo.setCityName(cityObject.getString("name"));
+                            cityBo.setCityCode(cityObject.getInt("id"));
+                            Log.d("flyzing", "onResponse: " + provincedId);
                             cityBo.setProvinceId(provincedId);
                             cityBoList.add(cityBo);
                         }
@@ -102,7 +104,7 @@ public class AreaApi {
     /**
      * 获取区、县
      */
-    public void getCounties(final int provincedId, int cityId, final ApiLinster apiLinster) {
+    public void getCounties(final int provincedId, final int cityId, final ApiLinster apiLinster) {
         String url = "http://guolin.tech/api/china/" + provincedId + "/" + cityId;
         HttpUtil.sendOnHttpRequest(url, new Callback() {
             @Override
@@ -115,6 +117,7 @@ public class AreaApi {
                 List<CountyBo> countyBoList = new ArrayList<CountyBo>();
                 String responseText = response.body().string();
                 if (!TextUtils.isEmpty(responseText)) {
+                    Log.d("flyzing", "onResponse: county:" + responseText);
                     try {
                         JSONArray allCounties = new JSONArray(responseText);
                         for (int i = 0; i < allCounties.length(); i ++) {
@@ -123,6 +126,7 @@ public class AreaApi {
                             countyBo.setId(countyObject.getInt("id"));
                             countyBo.setCountyName(countyObject.getString("name"));
                             countyBo.setWeatherId(countyObject.getString("weather_id"));
+                            countyBo.setCityId(cityId);
                             countyBoList.add(countyBo);
                         }
                         apiLinster.onSuccess(countyBoList);

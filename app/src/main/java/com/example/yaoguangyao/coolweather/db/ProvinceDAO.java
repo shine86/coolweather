@@ -15,33 +15,42 @@ import io.realm.Realm;
 public class ProvinceDao {
     private Realm realm;
 
-    public ProvinceDao() {
-        realm = Realm.getDefaultInstance();
-    }
+    public ProvinceDao() {}
 
     public List<ProvinceBo> findAll() {
-        List<Province> provinceList = null;
+        realm = Realm.getDefaultInstance();
+        List<ProvinceBo> provinceBoList = new ArrayList<>();
         try {
-            provinceList = realm.where(Province.class).findAll();
+            List<Province> provinceList = realm.where(Province.class).findAll();
+            if (provinceList.size() > 0) {
+                for (Province province : provinceList) {
+                    ProvinceBo provinceBo = new ProvinceBo(province);
+                    provinceBoList.add(provinceBo);
+                }
+            }
         } finally {
             realm.close();
-        }
-
-        List<ProvinceBo> provinceBoList = new ArrayList<>();
-        if (provinceList.size() > 0) {
-            for (Province province : provinceList) {
-                ProvinceBo provinceBo = new ProvinceBo(province);
-                provinceBoList.add(provinceBo);
-            }
         }
 
         return provinceBoList;
     }
 
     public void save(ProvinceBo provinceBo) {
+        realm = Realm.getDefaultInstance();
         try {
             realm.beginTransaction();
-            realm.copyToRealmOrUpdate(provinceBo.getEntity());
+            realm.copyToRealm(provinceBo.getEntity());
+            realm.commitTransaction();
+        } finally {
+            realm.close();
+        }
+    }
+
+    public void deleteAll() {
+        realm = Realm.getDefaultInstance();
+        try {
+            realm.beginTransaction();
+            realm.where(Province.class).findAll().deleteAllFromRealm();
             realm.commitTransaction();
         } finally {
             realm.close();

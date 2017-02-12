@@ -1,6 +1,7 @@
 package com.example.yaoguangyao.coolweather.view;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -91,6 +92,12 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCityBo = cityBoList.get(position);
                     queryCounties();
+                } else if (currentLevel == LEVEL_COUNTY) {
+                    String weatherId = countyBoList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActiivity.class);
+                    intent.putExtra("weather_id", weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -260,7 +267,7 @@ public class ChooseAreaFragment extends Fragment {
             @Override
             public void onSuccess(Object result) {
                 if (result != null) {
-                    List<CountyBo> countyList = (List<CountyBo>) result;
+                    List<CountyBo> countyBoList = (List<CountyBo>) result;
                     for (CountyBo countyBo : countyBoList) {
                         countyDao.save(countyBo);
                     }

@@ -17,6 +17,7 @@ public class CityBo {
 
     public CityBo(City city) {
         setId(city.getId());
+        setCityCode(city.getCityCode());
         setCityName(city.getCityName());
         setProvinceId(city.getProvinceId());
         setCityCode(city.getCityCode());
@@ -27,6 +28,7 @@ public class CityBo {
         city.setId(getId());
         city.setCityCode(getCityCode());
         city.setCityName(getCityName());
+        city.setProvinceId(getProvinceId());
         return city;
     }
 

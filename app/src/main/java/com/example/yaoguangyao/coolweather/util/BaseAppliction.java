@@ -2,6 +2,7 @@ package com.example.yaoguangyao.coolweather.util;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -20,6 +21,8 @@ public class BaseAppliction extends Application {
         initRealm(this);
         RealmConfiguration config = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(config);
+
+        Log.d("flyzing", "BaseAppliction onCreate: " + config);
     }
 
     /**

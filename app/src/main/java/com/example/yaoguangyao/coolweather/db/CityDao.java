@@ -1,5 +1,7 @@
 package com.example.yaoguangyao.coolweather.db;
 
+import android.util.Log;
+
 import com.example.yaoguangyao.coolweather.db.entity.City;
 import com.example.yaoguangyao.coolweather.model.CityBo;
 
@@ -16,34 +18,34 @@ public class CityDao {
     private Realm realm;
 
     public CityDao() {
-        realm = Realm.getDefaultInstance();
+
     }
 
     public List<CityBo> findAllByProvinceId(int provinceId) {
-        List<City> cityList = null;
+        realm = Realm.getDefaultInstance();
+        List<CityBo> cityBoList = new ArrayList<>();
         try {
-            cityList = realm.where(City.class).equalTo("provinceId", provinceId).findAll();
+            List<City> cityList = realm.where(City.class).equalTo("provinceId", provinceId).findAll();
+            Log.d("flyzing", "findAllByProvinceId cityList: " + cityList.size());
+            if (cityList.size() > 0) {
+                for (City city : cityList) {
+                    CityBo cityBo = new CityBo(city);
+                    cityBoList.add(cityBo);
+                }
+            }
         } finally {
             realm.close();
         }
-
-        List<CityBo> cityBoList = new ArrayList<>();
-        if (cityList.size() > 0) {
-            for (City city : cityList) {
-                CityBo cityBo = new CityBo(city);
-                cityBoList.add(cityBo);
-            }
-        }
-
         return cityBoList;
     }
 
 
 
     public void save(CityBo cityBo) {
+        realm = Realm.getDefaultInstance();
         try {
             realm.beginTransaction();
-            realm.copyToRealmOrUpdate(cityBo.getEntity());
+            realm.copyToRealm(cityBo.getEntity());
             realm.commitTransaction();
         } finally {
             realm.close();
